@@ -24,6 +24,9 @@ class WpBaseController {
                         'SinglePost' => function() {
                             return true;
                         },
+                        'Post' => function() {
+                            return is_admin();
+                        }
                     ],
                 ],
             ]
