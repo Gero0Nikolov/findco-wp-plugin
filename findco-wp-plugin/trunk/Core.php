@@ -77,6 +77,11 @@ class FindCoRating {
 
     function __destruct() {}
 
+    /**
+     * Autoloads the controllers of the modules specified in the configuration.
+     *
+     * @return void
+     */
     function autoload() {
 
         if (empty($this->config['autoload'])) { return false; }
@@ -124,6 +129,11 @@ class FindCoRating {
         }
     }
 
+    /**
+     * Autoloads the controllers of the modules specified in the configuration.
+     *
+     * @return void
+     */
     function loadPublicResources() {
         $jsBasePath = plugins_url('/resources/dist/scripts/', __FILE__);
         $jsResources = [
@@ -157,6 +167,12 @@ class FindCoRating {
         }
     }
 
+    /**
+     * Retrieves a specific module from the controllers array.
+     *
+     * @param string $moduleName The name of the module to retrieve.
+     * @return mixed The module if it exists, otherwise an empty array.
+     */
     public function getModule($moduleName){
         return (
             !empty($this->controllers[$moduleName]) ?

@@ -39,10 +39,24 @@ class Vote extends DbController {
         }
     }
 
+    /**
+     * Retrieves the name of the table associated with this controller.
+     *
+     * @return string The name of the table.
+     */
     function getTableName() {
         return $this->table['name'];
     }
 
+    /**
+     * Checks if a user has voted on a specific post.
+     *
+     * This function retrieves the user's IP address and checks the database to see if a vote from this IP exists for the specified post.
+     * If a vote exists, it returns the type of the vote. If no vote exists or the post ID is not provided, it returns null.
+     *
+     * @param int $postId The ID of the post to check.
+     * @return mixed The type of the vote if a vote exists, otherwise null.
+     */
     function userVoted($postId) {
         $postId = intval($postId);
         
@@ -69,6 +83,15 @@ class Vote extends DbController {
         return $results[0]['type'];
     }
 
+    /**
+     * Retrieves the vote results for a specific post.
+     *
+     * This function retrieves all votes for the specified post from the database and calculates the percentage of positive and negative votes.
+     * If no votes exist or the post ID is not provided, it returns an array with 'positive' and 'negative' keys both set to 0.
+     *
+     * @param int $postId The ID of the post to retrieve the vote results for.
+     * @return array An associative array containing the percentage of positive and negative votes.
+     */
     function getVoteResults($postId) {
         $result = [
             'positive' => 0,
@@ -117,6 +140,17 @@ class Vote extends DbController {
         return $result;
     }
 
+    /**
+     * Records a vote for a specific post.
+     *
+     * This function checks if the post ID and vote type are valid and if the user has not already voted on the post.
+     * If all checks pass, it retrieves the user's IP address and inserts a new row into the votes table in the database.
+     * The new row contains the user's IP, the post ID, and the vote type.
+     *
+     * @param int $postId The ID of the post to vote on.
+     * @param string $voteType The type of the vote ('1' for positive, '0' for negative).
+     * @return bool True if the vote was recorded successfully, otherwise false.
+     */
     function vote($postId, $voteType) {
         $postId = intval($postId);
         $voteType = $voteType;

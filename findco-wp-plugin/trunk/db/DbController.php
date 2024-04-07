@@ -27,6 +27,13 @@ class DbController {
         $this->init();
     }
 
+    /**
+     * Initializes the Database Controller.
+     *
+     * This method is responsible for triggering the autoload process for API scripts and running the install process.
+     *
+     * @return void
+     */
     function init() {
 
         // Autoload API scripts
@@ -36,6 +43,15 @@ class DbController {
         $allInstallState = $this->install();
     }
 
+    /**
+     * Autoloads the controllers specified in the configuration.
+     *
+     * This method scans the directory specified in the configuration for controller scripts.
+     * It then iterates over each script, checks if it should be loaded based on the configuration,
+     * and if so, requires the script and instantiates the controller.
+     *
+     * @return bool False if the controllers directory is empty or only contains '.', '..', otherwise no explicit return.
+     */
     function autoload() {
         if (empty(self::$config['controllersPath'])) { return false; }
 
@@ -65,6 +81,15 @@ class DbController {
         }
     }
 
+    /**
+     * Installs the controllers specified in the configuration.
+     *
+     * This method iterates over each controller in the controllers array, checks if it should be installed based on the configuration,
+     * and if so, calls the install method of the controller.
+     * It also handles prohibited controllers separately, checking if they exist in the controllers array and if so, calls their install method.
+     *
+     * @return bool False if the controllers array is empty, otherwise true.
+     */
     function install() {
 
         if (empty($this->controllers)) { return false; }
@@ -94,6 +119,15 @@ class DbController {
         return true;
     }
 
+    /**
+     * Registers a new table in the database.
+     *
+     * This function checks if the table already exists, and if not, it creates a new table with the specified name and columns.
+     * It also creates indices for the specified columns.
+     *
+     * @param array $table An associative array containing the name of the table, the columns, and the indexed columns.
+     * @return bool False if the table details are incomplete or if the table already exists, otherwise true.
+     */
     function registerTable($table) {
 
         if (
@@ -145,6 +179,12 @@ class DbController {
         return true;
     }
 
+    /**
+     * Retrieves a specific controller from the controllers array.
+     *
+     * @param string $controllerName The name of the controller to retrieve.
+     * @return mixed The controller if it exists, otherwise null.
+     */
     function getController($controllerName) {
         return (
             !empty($this->controllers[$controllerName]) ?

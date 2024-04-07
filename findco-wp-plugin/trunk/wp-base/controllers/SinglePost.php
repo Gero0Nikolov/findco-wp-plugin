@@ -15,6 +15,18 @@ class SinglePost extends WpBaseController {
         add_filter('the_content', [$this, 'appendVotingBox']);
     }
 
+    /**
+     * Appends a voting box to the content of a single post.
+     *
+     * This function checks if the current page is a single post page and if the global $FindCoRating variable is set.
+     * If both conditions are met, it retrieves the 'DbController' module and the 'Vote' controller.
+     * It then checks if the current user has voted on the post and retrieves the vote results if they have.
+     * Finally, it generates the HTML for the voting box, replaces the placeholders with the appropriate values,
+     * and appends the voting box to the content.
+     *
+     * @param string $content The original post content.
+     * @return string The post content with the voting box appended.
+     */
     function appendVotingBox($content) {
         if (!is_single()) { return $content; }
 

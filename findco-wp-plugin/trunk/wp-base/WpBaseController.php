@@ -36,12 +36,28 @@ class WpBaseController {
         $this->init();
     }
 
+    /**
+     * Initializes the WordPress Base Controller.
+     *
+     * This method is responsible for triggering the autoload process for WordPress controllers.
+     *
+     * @return void
+     */
     function init() {
 
         // Autoload WP Controllers
         $this->autoload();
     }
 
+    /**
+     * Autoloads the controllers specified in the configuration.
+     *
+     * This method scans the directory specified in the configuration for controller scripts.
+     * It then iterates over each script, checks if it should be loaded based on the configuration,
+     * and if so, requires the script and instantiates the controller.
+     *
+     * @return void
+     */
     function autoload() {
         if (
             empty(self::$config['controllers']) ||
@@ -82,6 +98,12 @@ class WpBaseController {
         }
     }
 
+    /**
+     * Retrieves a specific controller from the controllers array.
+     *
+     * @param string $controllerName The name of the controller to retrieve.
+     * @return mixed The controller if it exists, otherwise null.
+     */
     function getController($controllerName) {
         return (
             !empty($this->controllers[$controllerName]) ?
@@ -90,6 +112,13 @@ class WpBaseController {
         );
     }
 
+    /**
+     * Converts tags in a HTML string to their corresponding values.
+     *
+     * @param array $tags An associative array of tags and their corresponding values.
+     * @param string $html The HTML string in which to replace the tags.
+     * @return string The HTML string with the tags replaced by their values.
+     */
     function convertTagsToHtml($tags = [], $html) {
         if (empty($tags)) { return $html; }
 

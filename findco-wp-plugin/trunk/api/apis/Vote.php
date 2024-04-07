@@ -66,7 +66,17 @@ class Vote extends ApiController {
             ],
         ];
     }
-
+    
+    /**
+     * Applies a vote to a specific post.
+     *
+     * This function retrieves the post ID and vote type from the request. If either is missing, it returns an error.
+     * It then retrieves the Vote controller from the DbController module and applies the vote.
+     * If the vote fails, it returns an error. Otherwise, it retrieves the vote results and returns a success response.
+     *
+     * @param \WP_REST_Request $request The request object.
+     * @return mixed A WP_Error object if an error occurred, otherwise a WP_REST_Response object.
+     */
     function voteApply($request) {
         $postId = $request->get_param('postId');
         $voteType = $request->get_param('voteType');
