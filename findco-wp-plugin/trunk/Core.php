@@ -140,7 +140,11 @@ class FindCoRating {
                 'dir' => $jsResources['autoload'],
                 'dependenciesDir' => $jsResources['dependencies'],
                 'version' => $this->config['resourceVersion'],
-                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'apiUrl' => (
+                    get_site_url() .
+                    '/wp-json/find-co/v1/'
+                ),
+                'apiKey' => $this->config['moduleConfig']['api']['key'],
             ],
         ]);
 

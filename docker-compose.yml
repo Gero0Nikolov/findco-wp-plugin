@@ -9,7 +9,7 @@ services:
     volumes:
       - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
       - ./wp-app:/var/www/html # Full wordpress project
-      #- ./plugin-name/trunk/:/var/www/html/wp-content/plugins/plugin-name # Plugin development
+      - ./findco-wp-plugin/trunk/:/var/www/html/wp-content/plugins/plugin-name # Plugin development
       #- ./theme-name/trunk/:/var/www/html/wp-content/themes/theme-name # Theme development
     environment:
       WORDPRESS_DB_HOST: db
@@ -24,6 +24,7 @@ services:
 
   pma:
     image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
     container_name: "${APP_NAME}_phpmyadmin"
     environment:
       # https://docs.phpmyadmin.net/en/latest/setup.html#docker-environment-variables

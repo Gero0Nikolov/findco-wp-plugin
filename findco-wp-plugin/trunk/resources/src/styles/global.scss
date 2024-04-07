@@ -1,6 +1,7 @@
 .findco-voting-box {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     border: 1px dashed purple;
@@ -11,11 +12,14 @@
     font-weight: 600;
 
     &-title {
-        margin-right: 32px;
+
+        @media (min-width: 667px) {
+            margin-right: 32px;
+        }
     }
 
     .findco-vote-button {
-        display: inline-block;
+        display: inline-flex;
         border: 1px solid grey;
         border-radius: 5px;
         text-transform: uppercase;
@@ -23,6 +27,7 @@
         padding: 4px 8px;
         cursor: pointer;
         background-color: transparent;
+        gap: 4px;
         
         &:not(:last-child) {
             margin-right: 8px;
@@ -33,6 +38,15 @@
         &.findco-vote-selected {
             color: blue;
             border-color: blue;
+
+            svg {
+                fill: blue
+            }
+        }
+
+        svg {
+            width: 16px;
+            height: 16px;
         }
     }
 }

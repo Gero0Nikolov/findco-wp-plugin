@@ -46,7 +46,7 @@ class Vote extends DbController {
     function userVoted($postId) {
         $postId = intval($postId);
         
-        if (empty($postId)) { return false; }
+        if (empty($postId)) { return null; }
 
         $userIp = (
             isset($_SERVER['HTTP_X_FORWARDED_FOR']) ?
@@ -57,14 +57,16 @@ class Vote extends DbController {
         global $wpdb;
 
         $query = $wpdb->prepare(
-            "SELECT * FROM ". $this->table['name'] ." WHERE ip = %s AND postId = %d",
+            "SELECT * FROM ". $this->table['name'] ." WHERE ip = %s AND postId = %d LIMIT 1",
             $userIp,
             $postId
         );
 
-        $results = $wpdb->get_results($query);
+        $results = $wpdb->get_results($query, ARRAY_A);
 
-        return !empty($results);
+        if (empty($results)) { return null; }
+
+        return $results[0]['type'];
     }
 
     function getVoteResults($postId) {
@@ -84,7 +86,7 @@ class Vote extends DbController {
             $postId
         );
 
-        $results = $wpdb->get_results($query);
+        $results = $wpdb->get_results($query, ARRAY_A);
 
         if (empty($results)) { return $result; }
 
@@ -97,17 +99,58 @@ class Vote extends DbController {
                 $positiveVotes += 1;
             }
 
+            if ($voteObject['type'] === '0') {
+                $negativeVotes += 1;
+            }
+
             $totalVotes += 1;
         }
 
         if ($totalVotes > 0) {
             $positivePercentage = ($positiveVotes / $totalVotes) * 100;
-            $negativePercentage = 100 - $positivePercentage;
+            $negativePercentage = ($negativeVotes / $totalVotes) * 100;
 
             $result['positive'] = round($positivePercentage, 0);
             $result['negative'] = round($negativePercentage, 0);
         }
 
         return $result;
+    }
+
+    function vote($postId, $voteType) {
+        $postId = intval($postId);
+        $voteType = $voteType;
+        
+        if (
+            empty($postId) || 
+            (
+                empty($voteType) &&
+                $voteType !== '0'
+            ) ||
+            (
+                $voteType !== '1' &&
+                $voteType !== '0' 
+            ) ||
+            $this->userVoted($postId)
+        ) { return false; }
+
+        $userIp = (
+            isset($_SERVER['HTTP_X_FORWARDED_FOR']) ?
+            $_SERVER['HTTP_X_FORWARDED_FOR'] :
+            $_SERVER['REMOTE_ADDR']
+        );
+
+        global $wpdb;
+
+        $query = $wpdb->prepare(
+            "INSERT INTO ". $this->table['name'] ." (ip, postId, type) VALUES (%s, %d, %d)",
+            $userIp,
+            $postId,
+            $voteType
+        );
+
+        $insertState = $wpdb->query($query);
+
+        return $insertState;
     }
 }

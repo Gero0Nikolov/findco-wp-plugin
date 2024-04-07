@@ -52,13 +52,56 @@ class Vote extends ApiController {
                     ],
                 ],
             ],
+            'postIdMissing' => [
+                'label' => 'Thread Slug is missing.',
+                'status' => 404,
+            ],
+            'voteTypeMissing' => [
+                'label' => 'Vote Type is missing.',
+                'status' => 404,
+            ],
+            'voteFailed' => [
+                'label' => 'Vote failed.',
+                'status' => 400,
+            ],
         ];
     }
 
     function voteApply($request) {
-        // TODO: Connect the Vote API
+        $postId = $request->get_param('postId');
+        $voteType = $request->get_param('voteType');
+
+        if (empty($postId)) {
+            return self::handleError('postIdMissing', [], []);
+        }
+
+        if (empty($voteType) && $voteType !== '0') {
+            return self::handleError('voteTypeMissing', [], []);
+        }
+
+        global $FindCoRating;
+
+        $dbModule = $FindCoRating->getModule('DbController');
+        $voteTable = $dbModule->getController('Vote');
+
+        $vote = $voteTable->vote($postId, $voteType);
+
+        if (!$vote) {
+            return self::handleError('voteFailed', [], []);
+        }
+
+        $voteResults = $voteTable->getVoteResults($postId);
+
+        $text = [
+            'title' => 'Thank you for your feedback.',
+            'voteUpText' => $voteResults['positive'] .'%',
+            'voteDownText' => $voteResults['negative'] .'%',
+        ];
+
         return self::handleSuccess([
             'voteState' => true,
+            'text' => $text,
+            'voteType' => $voteType,
         ]);
     }
 }

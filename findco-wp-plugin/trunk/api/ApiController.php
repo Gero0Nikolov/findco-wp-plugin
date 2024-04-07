@@ -121,11 +121,11 @@ class ApiController {
             'callback' => [$class, $class::$config['callback']],
             'args' => !empty($class::$config['args']) ? $class::$config['args'] : [],
             'permission_callback' => function (\WP_REST_Request $request) {
-                $apiKey = $request->get_param('apiKey');
+                $apiKey = $request->get_param('apiKey');                
 
                 if (
                     empty($apiKey) ||
-                    self::apiKeyCheck($apiKey)
+                    !self::apiKeyCheck($apiKey)
                 ) { return false; }
 
                 return true;                
