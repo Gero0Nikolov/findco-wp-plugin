@@ -1,0 +1,38 @@
+.findco-voting-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed purple;
+    padding: 16px;
+    border-radius: 10px;
+    gap: 0;
+    text-transform: uppercase;
+    font-weight: 600;
+
+    &-title {
+        margin-right: 32px;
+    }
+
+    .findco-vote-button {
+        display: inline-block;
+        border: 1px solid grey;
+        border-radius: 5px;
+        text-transform: uppercase;
+        font-weight: 600;
+        padding: 4px 8px;
+        cursor: pointer;
+        background-color: transparent;
+        
+        &:not(:last-child) {
+            margin-right: 8px;
+        }
+
+        &:hover,
+        &:active,
+        &.findco-vote-selected {
+            color: blue;
+            border-color: blue;
+        }
+    }
+}
