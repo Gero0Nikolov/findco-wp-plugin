@@ -48,5 +48,9 @@
             width: 16px;
             height: 16px;
         }
+
+        &.findco-vote-disabled {
+            pointer-events: none;
+        }
     }
 }

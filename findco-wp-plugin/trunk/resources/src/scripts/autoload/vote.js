@@ -48,15 +48,17 @@ class Vote {
         }).then(data => {
             const text = data.text;
 
-            console.log([
-                document.querySelector(window.Vote.selector.voteTitle),
-                text
-            ]);
+            const opositeVote = (
+                data.voteType === '1' ?
+                '0' :
+                '1'
+            );
 
             document.querySelector(window.Vote.selector.voteTitle).innerHTML = text.title;
             document.querySelector(window.Vote.selector.votePositive +' .text').innerHTML = text.voteUpText;
             document.querySelector(window.Vote.selector.voteNegative +' .text').innerHTML = text.voteDownText;
             document.querySelector(window.Vote.selector.voteButton +`[data-type="${data.voteType}"]`).classList.add('findco-vote-selected');
+            document.querySelector(window.Vote.selector.voteButton +`[data-type="${opositeVote}"]`).classList.add('findco-vote-disabled');
         }).catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });

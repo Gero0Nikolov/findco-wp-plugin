@@ -85,7 +85,11 @@ class SinglePost extends WpBaseController {
             'voteUpSelectedClass' => (
                 $userVoted === '1' ?
                 'findco-vote-selected' :
-                ''
+                (
+                    $userVoted === '0' ?
+                    'findco-vote-disabled' :
+                    ''
+                )
             ),
             'voteUpText' => (
                 $userVoted === null ?
@@ -95,7 +99,11 @@ class SinglePost extends WpBaseController {
             'voteDownSelectedClass' => (
                 $userVoted === '0' ?
                 'findco-vote-selected' :
-                ''
+                (
+                    $userVoted === '1' ?
+                    'findco-vote-disabled' :
+                    ''
+                )
             ),
             'voteDownText' => (
                 $userVoted === null ?
